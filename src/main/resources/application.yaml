@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: memo-vocab
+  data:
+    mongodb:
+      database: memo-vocab
