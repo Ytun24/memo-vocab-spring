@@ -1,4 +1,4 @@
-package com.example.memo_vocab;
+package com.example.memovocab;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

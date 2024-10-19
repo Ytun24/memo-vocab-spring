@@ -1,4 +1,4 @@
-package com.example.memo_vocab;
+package com.example.memovocab;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
