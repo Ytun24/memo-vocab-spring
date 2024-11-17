@@ -4,7 +4,9 @@ CREATE TABLE users (
   last_name VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_updated_user_id VARCHAR(255),
+  created_user_id INTEGER,
+  last_updated_user_id INTEGER,
+  last_updated_at TIMESTAMP
   version INTEGER DEFAULT 1,
   deleted BOOLEAN DEFAULT FALSE
 );

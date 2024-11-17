@@ -1,4 +1,4 @@
-INSERT INTO users (first_name, last_name, username, last_updated_user_id) VALUES
+INSERT INTO users (first_name, last_name, username, created_user_id) VALUES
 ('John', 'Doe', 'johndoe', 1),
 ('Jane', 'Smith', 'janesmith', 1),
 ('Alice', 'Johnson', 'alicej', 1),

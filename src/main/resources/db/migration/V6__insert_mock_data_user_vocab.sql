@@ -1,4 +1,4 @@
-INSERT INTO user_preferences (user_id, email, phone_number, last_updated_user_id) VALUES
+INSERT INTO user_preferences (user_id, email, phone_number, created_user_id) VALUES
 (1, 'john.doe@example.com', '+1234567890', 1),
 (2, 'jane.smith@example.com', '+1234567891', 1),
 (3, 'alice.johnson@example.com', '+1234567892', 1),
