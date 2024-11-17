@@ -1,14 +1,15 @@
-INSERT INTO user_preferences (user_id, email, phone_number) VALUES
-(1, 'john.doe@example.com', '+1234567890'),
-(2, 'jane.smith@example.com', '+1234567891'),
-(3, 'alice.johnson@example.com', '+1234567892'),
-(4, 'bob.brown@example.com', '+1234567893'),
-(5, 'charlie.davis@example.com', '+1234567894'),
-(6, 'eve.miller@example.com', '+1234567895'),
-(7, 'frank.wilson@example.com', '+1234567896'),
-(8, 'grace.lee@example.com', '+1234567897'),
-(9, 'hank.moore@example.com', '+1234567898'),
-(10, 'ivy.clark@example.com', '+1234567899');
+INSERT INTO user_preferences (user_id, email, phone_number, last_updated_user_id) VALUES
+(1, 'john.doe@example.com', '+1234567890', 1),
+(2, 'jane.smith@example.com', '+1234567891', 1),
+(3, 'alice.johnson@example.com', '+1234567892', 1),
+(4, 'bob.brown@example.com', '+1234567893', 1),
+(5, 'charlie.davis@example.com', '+1234567894', 1),
+(6, 'eve.miller@example.com', '+1234567895', 1),
+(7, 'frank.wilson@example.com', '+1234567896', 1),
+(8, 'grace.lee@example.com', '+1234567897', 1),
+(9, 'hank.moore@example.com', '+1234567898', 1),
+(10, 'ivy.clark@example.com', '+1234567899', 1);
+
 
 INSERT INTO vocabulary (name, type, description) VALUES
 ('Apple', 'Noun', 'A fruit that is usually red, green, or yellow'),
