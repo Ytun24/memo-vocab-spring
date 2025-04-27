@@ -1,6 +1,8 @@
 package com.example.memovocab.controller;
 
 import com.example.memovocab.entity.User;
+import com.example.memovocab.model.UserPostRequestDto;
+import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +36,13 @@ public class UserRestController {
     public Optional<User> getUserById(@PathVariable("id") Integer id) {
         log.info("Get User by {}", id);
         return userService.getUser(id);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserPostResponseDto> createUser(@RequestBody UserPostRequestDto user) {
+        log.info("Create User");
+        UserPostResponseDto result = userService.createUser(user);
+        return ResponseEntity.ok(result);
     }
 
 }

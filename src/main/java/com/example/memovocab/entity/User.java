@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "users", schema="memo-vocab")
-public class User {
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "first_name")
