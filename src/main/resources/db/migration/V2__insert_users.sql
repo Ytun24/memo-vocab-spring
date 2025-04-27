@@ -1,11 +1,11 @@
-INSERT INTO users (first_name, last_name, username, created_user_id) VALUES
-('John', 'Doe', 'johndoe', 1),
-('Jane', 'Smith', 'janesmith', 1),
-('Alice', 'Johnson', 'alicej', 1),
-('Bob', 'Brown', 'bobbrown', 1),
-('Charlie', 'Davis', 'charlied', 1),
-('Eve', 'Miller', 'evem', 1),
-('Frank', 'Wilson', 'frankw', 1),
-('Grace', 'Lee', 'gracelee', 1),
-('Hank', 'Moore', 'hankm', 1),
-('Ivy', 'Clark', 'ivyc', 1);
+INSERT INTO users (first_name, last_name, username, created_by) VALUES
+('John', 'Doe', 'johndoe', 'system'),
+('Jane', 'Smith', 'janesmith', 'system'),
+('Alice', 'Johnson', 'alicej', 'system'),
+('Bob', 'Brown', 'bobbrown', 'system'),
+('Charlie', 'Davis', 'charlied', 'system'),
+('Eve', 'Miller', 'evem', 'system'),
+('Frank', 'Wilson', 'frankw', 'system'),
+('Grace', 'Lee', 'gracelee', 'system'),
+('Hank', 'Moore', 'hankm', 'system'),
+('Ivy', 'Clark', 'ivyc', 'system');

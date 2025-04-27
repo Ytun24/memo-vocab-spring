@@ -2,7 +2,7 @@ spring:
   application:
     name: memo-vocab-spring
   datasource:
-    url: jdbc:postgresql://localhost:5432/memo-vocab
+    url: jdbc:postgresql://localhost:5432/memo-vocab-db
     driverClassName: org.postgresql.Driver
     username: postgres
     password: password
@@ -10,5 +10,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
   hibernate:
     ddl-auto: none
+  flyway:
+    enabled: false
+    validate-on-migrate: true
+    default-schema: memo-vocab
+    locations: classpath:db/migration
