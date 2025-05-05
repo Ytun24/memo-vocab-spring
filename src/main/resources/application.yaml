@@ -18,3 +18,7 @@ spring:
     validate-on-migrate: true
     default-schema: memo-vocab
     locations: classpath:db/migration
+  security:
+    user:
+      name: user
+      password: password
