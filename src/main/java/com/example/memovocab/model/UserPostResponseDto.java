@@ -1,5 +1,6 @@
 package com.example.memovocab.model;
 
+import com.example.memovocab.entity.UserPreferences;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,4 +11,5 @@ public class UserPostResponseDto {
     private String firstName;
     private String lastName;
     private String username;
+    private UserPreferences userPreferences;
 }
