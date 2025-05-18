@@ -29,4 +29,10 @@ public class UserService {
         User user = UserMapper.INSTANCE.mapToUser(userReq);
         return UserMapper.INSTANCE.mapToUserPostResponseDto(userRepository.save(user));
     }
+
+    public UserPostResponseDto updateUser(Integer userId, UserPostRequestDto userReq) {
+        User user = getUser(userId).get();
+        UserMapper.INSTANCE.updateUserFromDto(userReq, user);
+        return UserMapper.INSTANCE.mapToUserPostResponseDto(userRepository.save(user));
+    }
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserRestController {
 
@@ -33,15 +34,22 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") Integer id) {
-        log.info("Get User by {}", id);
-        return userService.getUser(id);
+    public Optional<User> getUserById(@PathVariable("id") Integer userId) {
+        log.info("Get User by User ID {}", userId);
+        return userService.getUser(userId);
     }
 
     @PostMapping("/create")
     public ResponseEntity<UserPostResponseDto> createUser(@RequestBody UserPostRequestDto user) {
         log.info("Create User");
         UserPostResponseDto result = userService.createUser(user);
+        return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserPostResponseDto> updateUser(@PathVariable("id") Integer userId, @RequestBody UserPostRequestDto user) {
+        log.info("Update User ID {}", userId);
+        UserPostResponseDto result = userService.updateUser(userId, user);
         return ResponseEntity.ok(result);
     }
 
