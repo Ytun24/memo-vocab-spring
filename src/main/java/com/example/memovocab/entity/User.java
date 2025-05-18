@@ -18,7 +18,8 @@ import lombok.Data;
 @Table(name = "users", schema="memo-vocab")
 public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
+    @SequenceGenerator(name="user_generator", sequenceName = "users_id_seq", schema="memo-vocab", allocationSize = 1)
     private int id;
 
     @Column(name = "first_name")
