@@ -1,6 +1,7 @@
 package com.example.memovocab.controller;
 
 import com.example.memovocab.entity.User;
+import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.service.UserService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -34,7 +34,7 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") Integer userId) {
+    public UserDto getUserById(@PathVariable("id") Integer userId) {
         log.info("Get User by User ID {}", userId);
         return userService.getUser(userId);
     }
