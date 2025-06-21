@@ -16,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
 @Order(1)
@@ -39,7 +41,10 @@ public class GlobalExceptionRestController extends ResponseEntityExceptionHandle
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
                 log.info("Message: {}, Error: {}", ex.getMessage(), ex);
-                ErrorResponse response = new ErrorResponse(1002, "Invalid request");
+                String errors = ex.getBindingResult().getFieldErrors().stream()
+                        .map(fieldError -> fieldError.getDefaultMessage())
+                        .collect(Collectors.joining(", "));
+                ErrorResponse response = new ErrorResponse(1002, "Invalid request: " + errors);
                 return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 }
