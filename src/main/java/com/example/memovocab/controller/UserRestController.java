@@ -23,7 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j @RestController @RequestMapping("/users") @RequiredArgsConstructor public class UserRestController {
+@Slf4j
+@RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
+public class UserRestController {
 
     private final UserService userService;
 
