@@ -1,40 +1,39 @@
 package com.example.memovocab.controller;
 
 import com.example.memovocab.entity.User;
+import com.example.memovocab.exception.NotFoundException;
 import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
-@RestController
-@RequestMapping("/users")
-@RequiredArgsConstructor
-public class UserRestController {
+@Slf4j @RestController @RequestMapping("/users") @RequiredArgsConstructor public class UserRestController {
 
     private final UserService userService;
 
-    @PostMapping("/search")
-    public ResponseEntity<List<User>> searchUser() {
+    @PostMapping("/search") public ResponseEntity<List<User>> searchUser() {
         log.info("Search User");
         var result = userService.searchUser();
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable("id") Integer userId) {
+    @GetMapping("/{id}") public UserDto getUserById(@PathVariable("id") Integer userId) {
         log.info("Get User by User ID {}", userId);
         return userService.getUser(userId);
     }
@@ -46,11 +45,25 @@ public class UserRestController {
         return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserPostResponseDto> updateUser(@PathVariable("id") Integer userId, @RequestBody UserPostRequestDto user) {
+    @PatchMapping("/{id}") public ResponseEntity<UserPostResponseDto> updateUser(@PathVariable(
+            "id") Integer userId, @RequestBody UserPostRequestDto user) {
         log.info("Update User ID {}", userId);
         UserPostResponseDto result = userService.updateUser(userId, user);
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity replaceUser(@PathVariable Integer userId, RequestEntity<UserPostRequestDto> requestEntity) throws NotFoundException {
+        log.info("Replace User ID {}", userId);
+        log.info("{}, {}", requestEntity.getMethod(), requestEntity.getUrl());
+        UserPostResponseDto result = userService.replaceUser(userId, requestEntity.getBody());
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{userId}") public ResponseEntity deleteUser(@PathVariable Integer userId) {
+        log.info("Delete User ID {}", userId);
+        userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

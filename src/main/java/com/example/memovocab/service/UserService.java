@@ -1,6 +1,7 @@
 package com.example.memovocab.service;
 
 import com.example.memovocab.entity.User;
+import com.example.memovocab.exception.NotFoundException;
 import com.example.memovocab.mapper.UserMapper;
 import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
@@ -35,5 +36,20 @@ public class UserService {
         User user = userRepository.findById(userId).get();
         UserMapper.INSTANCE.updateUserFromDto(userReq, user);
         return UserMapper.INSTANCE.mapToUserPostResponseDto(userRepository.save(user));
+    }
+
+    public UserPostResponseDto replaceUser(Integer userId, UserPostRequestDto userReq) throws NotFoundException {
+        User updatedUser = userRepository.findById(userId).map(exitingUser -> {
+            exitingUser.setUsername(userReq.getUsername());
+            exitingUser.setFirstName(userReq.getFirstName());
+            exitingUser.setLastName(userReq.getLastName());
+            return userRepository.save(exitingUser);
+        }).orElseThrow(() -> new NotFoundException("User not found"));
+
+        return UserMapper.INSTANCE.mapToUserPostResponseDto(updatedUser);
+    }
+
+    public void deleteUser(Integer userId) {
+        userRepository.deleteById(userId);
     }
 }
