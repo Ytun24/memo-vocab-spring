@@ -6,6 +6,7 @@ import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class UserRestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserPostResponseDto> createUser(@RequestBody UserPostRequestDto user) {
+    public ResponseEntity<UserPostResponseDto> createUser(@Valid @RequestBody UserPostRequestDto user) {
         log.info("Create User");
         UserPostResponseDto result = userService.createUser(user);
         return ResponseEntity.ok(result);
@@ -57,7 +58,7 @@ public class UserRestController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity replaceUser(@PathVariable Integer userId, RequestEntity<UserPostRequestDto> requestEntity) throws NotFoundException {
+    public ResponseEntity<UserPostResponseDto> replaceUser(@PathVariable Integer userId, @Valid RequestEntity<UserPostRequestDto> requestEntity) throws NotFoundException {
         log.info("Replace User ID {}", userId);
         log.info("{}, {}", requestEntity.getMethod(), requestEntity.getUrl());
         UserPostResponseDto result = userService.replaceUser(userId, requestEntity.getBody());

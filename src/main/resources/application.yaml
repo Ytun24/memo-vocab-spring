@@ -23,3 +23,10 @@ spring:
     user:
       name: user
       password: password
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        validation: DEBUG
