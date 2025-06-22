@@ -1,13 +1,18 @@
 package com.example.memovocab.service;
 
 import com.example.memovocab.entity.User;
+import com.example.memovocab.enums.SortDirection;
 import com.example.memovocab.exception.NotFoundException;
 import com.example.memovocab.mapper.UserMapper;
 import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
+import com.example.memovocab.model.UserSearchDto;
 import com.example.memovocab.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> searchUser() {
-        return userRepository.findAll();
+    public List<UserDto> searchUser(UserSearchDto searchCriteria) {
+        Pageable pageable = PageRequest.of(searchCriteria.getPaging().getPageNumber(), searchCriteria.getPaging().getPageSize(),
+                searchCriteria.getSorting().getDirection().equals(SortDirection.ASC)
+                        ? Sort.by(searchCriteria.getSorting().getField()).ascending()
+                        : Sort.by(searchCriteria.getSorting().getField()).descending());
+        return UserMapper.INSTANCE.mapToUserDtoList(userRepository.findAll(pageable).getContent());
     }
 
     public UserDto getUser(int id) {

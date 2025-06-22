@@ -24,6 +24,7 @@ public class Favorites {
     @Column(name = "vocab_id")
     private int vocabId;
 
+    // TODO: check LAZY fetch
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

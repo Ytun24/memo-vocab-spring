@@ -1,10 +1,10 @@
 package com.example.memovocab.controller;
 
-import com.example.memovocab.entity.User;
 import com.example.memovocab.exception.NotFoundException;
 import com.example.memovocab.model.UserDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
+import com.example.memovocab.model.UserSearchDto;
 import com.example.memovocab.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,9 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @PostMapping("/search") public ResponseEntity<List<User>> searchUser() {
+    @PostMapping("/search") public ResponseEntity<List<UserDto>> searchUser(@Valid @RequestBody UserSearchDto searchCriteria) {
         log.info("Search User");
-        var result = userService.searchUser();
+        var result = userService.searchUser(searchCriteria);
         return ResponseEntity.ok(result);
     }
 

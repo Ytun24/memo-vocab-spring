@@ -10,6 +10,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
@@ -17,6 +19,8 @@ public interface UserMapper {
     User mapToUser(UserPostRequestDto userPostRequestDto);
 
     UserDto mapToUserDto(User user);
+
+    List<UserDto> mapToUserDtoList(List<User> user);
 
     UserPostResponseDto mapToUserPostResponseDto(User user);
 
