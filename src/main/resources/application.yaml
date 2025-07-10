@@ -12,7 +12,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
-#    open-in-view: false
+#    open-in-view: false recheck on fetch lazy
   hibernate:
     ddl-auto: none
   flyway:
@@ -21,9 +21,10 @@ spring:
     default-schema: memo-vocab
     locations: classpath:db/migration
   security:
-    user:
-      name: user
-      password: password
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_SET_URI:http://localhost:8180/realms/memo-vocab-dev/protocol/openid-connect/certs}
 
 logging:
   level:
