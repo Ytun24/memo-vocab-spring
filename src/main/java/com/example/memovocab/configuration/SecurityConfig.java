@@ -18,6 +18,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/users/search").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http.oauth2ResourceServer(rsc -> rsc.jwt(jwtConfigurer ->
