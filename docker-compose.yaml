@@ -17,3 +17,13 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: password
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3.0
+    container_name: keycloak
+    command: start-dev
+    restart: always
+    ports:
+      - "8180:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: password
