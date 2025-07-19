@@ -1,0 +1,2 @@
+INSERT  INTO auth_users (username, password, role) VALUES ('user', '{noop}password', 'user');
+INSERT  INTO auth_users (username, password, role) VALUES ('admin', '{bcrypt}$2a$12$KMZ4f8Q7WQ1Lyp5KwKAYc./PGPCeZxbUwXr3NF5vJ0Adot8K97vLq', 'admin');
