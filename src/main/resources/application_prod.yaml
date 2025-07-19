@@ -1,8 +1,7 @@
 spring:
-  profiles:
-    active: default
   config:
-    import: application_prod.yaml
+    activate:
+      on-profile: prod
   application:
     name: memo-vocab-spring
   datasource:
@@ -14,9 +13,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: true
-#    open-in-view: false
+        format_sql: false
+    show-sql: false
   hibernate:
     ddl-auto: none
   flyway:
@@ -33,6 +31,6 @@ logging:
   level:
     org:
       springframework:
-        web: DEBUG
-        validation: DEBUG
-        security: DEBUG
+        web: ERROR
+        validation: ERROR
+        security: ERROR
