@@ -28,6 +28,12 @@ spring:
     user:
       name: user
       password: password
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 logging:
   level:

@@ -17,3 +17,9 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: password
+  redis:
+    image: redis
+    container_name: memo-vocab-redis
+    restart: always
+    ports:
+      - "6379:6379"

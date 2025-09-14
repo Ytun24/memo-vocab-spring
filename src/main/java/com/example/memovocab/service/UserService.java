@@ -10,6 +10,9 @@ import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.model.UserSearchDto;
 import com.example.memovocab.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    public static final String USER_CACHE = "users";
+
     private final UserRepository userRepository;
 
     public List<UserDto> searchUser(UserSearchDto searchCriteria) {
@@ -31,11 +36,13 @@ public class UserService {
         return UserMapper.INSTANCE.mapToUserDtoList(userRepository.findAll(pageable).getContent());
     }
 
+    @Cacheable(value = USER_CACHE, key = "#id")
     public UserDto getUser(int id) {
         User user = userRepository.findById(id).get();
         return UserMapper.INSTANCE.mapToUserDto(user);
     }
 
+    @CachePut(value = USER_CACHE, key = "#result.id")
     public UserPostResponseDto createUser(UserPostRequestDto userReq) {
         User user = UserMapper.INSTANCE.mapToUser(userReq);
         return UserMapper.INSTANCE.mapToUserPostResponseDto(userRepository.save(user));
@@ -58,6 +65,7 @@ public class UserService {
         return UserMapper.INSTANCE.mapToUserPostResponseDto(updatedUser);
     }
 
+    @CacheEvict(value = USER_CACHE, key = "#userId")
     public void deleteUser(Integer userId) {
         userRepository.deleteById(userId);
     }
