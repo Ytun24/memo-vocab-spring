@@ -5,14 +5,17 @@ import com.example.memovocab.enums.SortDirection;
 import com.example.memovocab.exception.NotFoundException;
 import com.example.memovocab.mapper.UserMapper;
 import com.example.memovocab.model.UserDto;
+import com.example.memovocab.model.UserMessageDto;
 import com.example.memovocab.model.UserPostRequestDto;
 import com.example.memovocab.model.UserPostResponseDto;
 import com.example.memovocab.model.UserSearchDto;
 import com.example.memovocab.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -27,6 +31,7 @@ public class UserService {
     public static final String USER_CACHE = "users";
 
     private final UserRepository userRepository;
+    private final StreamBridge streamBridge;
 
     public List<UserDto> searchUser(UserSearchDto searchCriteria) {
         Pageable pageable = PageRequest.of(searchCriteria.getPaging().getPageNumber(), searchCriteria.getPaging().getPageSize(),
@@ -45,7 +50,17 @@ public class UserService {
     @CachePut(value = USER_CACHE, key = "#result.id")
     public UserPostResponseDto createUser(UserPostRequestDto userReq) {
         User user = UserMapper.INSTANCE.mapToUser(userReq);
-        return UserMapper.INSTANCE.mapToUserPostResponseDto(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        sendCommunication(userReq);
+        return UserMapper.INSTANCE.mapToUserPostResponseDto(savedUser);
+    }
+
+    private void sendCommunication(UserPostRequestDto user) {
+        UserMessageDto userMessageDto = new UserMessageDto(user.getFirstName(), user.getPreference().getEmail(),
+                user.getPreference().getPhoneNumber());
+        log.info("Sending email request for the details: {}", userMessageDto);
+        boolean result = streamBridge.send("emailMessage-out-0", userMessageDto);
+        log.info("Is the email request successfully triggered? : {}", result);
     }
 
     public UserPostResponseDto updateUser(Integer userId, UserPostRequestDto userReq) {

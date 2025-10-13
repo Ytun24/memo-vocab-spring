@@ -1,5 +1,6 @@
 package com.example.memovocab.model;
 
+import com.example.memovocab.entity.UserPreferences;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +16,6 @@ public class UserPostRequestDto {
 
     @NotBlank(message = "Username must not be blank")
     private String username;
+
+    private UserPreferences preference;
 }

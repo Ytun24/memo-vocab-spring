@@ -34,6 +34,17 @@ spring:
     redis:
       host: localhost
       port: 6379
+  cloud:
+    stream:
+      bindings:
+        emailMessage-out-0:                   # output binding name
+          destination: email-communication    # exchange name in RabbitMQ
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 logging:
   level:
