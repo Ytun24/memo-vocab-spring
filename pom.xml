@@ -13,7 +13,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>memo-vocab-spring</name>
 	<description>Memo vocab project for Spring Boot</description>
-	<url/>
+    <packaging>jar</packaging>
+    <url/>
 	<licenses>
 		<license/>
 	</licenses>
