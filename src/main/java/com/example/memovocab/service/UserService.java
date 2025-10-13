@@ -24,8 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    public static final String USER_CACHE = "users";
-
+    public static final String USER_CACHE = "userCache";
+    
     private final UserRepository userRepository;
 
     public List<UserDto> searchUser(UserSearchDto searchCriteria) {
@@ -36,7 +36,7 @@ public class UserService {
         return UserMapper.INSTANCE.mapToUserDtoList(userRepository.findAll(pageable).getContent());
     }
 
-    @Cacheable(value = USER_CACHE, key = "#id")
+    @Cacheable(cacheNames = "userCache", key = "#id")
     public UserDto getUser(int id) {
         User user = userRepository.findById(id).get();
         return UserMapper.INSTANCE.mapToUserDto(user);

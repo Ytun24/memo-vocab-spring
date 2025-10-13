@@ -30,6 +30,7 @@ spring:
       password: password
   cache:
     type: redis
+    cache-names: userCache
   data:
     redis:
       host: localhost
