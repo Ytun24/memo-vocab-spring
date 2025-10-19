@@ -1,0 +1,13 @@
+services:
+  network-deploy-service:
+    networks:
+      - memo-vocab-network
+
+  microservice-config:
+    extends:
+      service: network-deploy-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/memo-vocab-db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATA_REDIS_HOST: redis

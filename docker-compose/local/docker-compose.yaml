@@ -8,6 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4
@@ -17,6 +18,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: password
+
   redis:
     image: redis
     container_name: memo-vocab-redis

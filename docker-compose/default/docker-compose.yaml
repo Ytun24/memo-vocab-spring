@@ -1,0 +1,91 @@
+services:
+  db:
+    image: postgres
+    container_name: memo-vocab-db-default
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: memo-vocab-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 10s
+      retries: 5
+      interval: 10s
+      start_period: 10s
+    extends:
+      file: common-config.yaml
+      service: network-deploy-service
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4-default
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    extends:
+      file: common-config.yaml
+      service: network-deploy-service
+
+  flyway:
+    image: flyway/flyway
+    container_name: memo-vocab-flyway-default
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      -url=jdbc:postgresql://db:5432/memo-vocab-db 
+      -user=postgres -password=password 
+      -schemas=memo-vocab 
+      -locations=filesystem:/flyway/sql
+      migrate
+    volumes:
+      - ../../src/main/resources/db/migration:/flyway/sql
+    extends:
+      file: common-config.yaml
+      service: microservice-config
+
+  redis:
+    image: redis
+    container_name: memo-vocab-redis-default
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 10s
+      retries: 5
+      interval: 10s
+      start_period: 10s
+    extends:
+      file: common-config.yaml
+      service: network-deploy-service
+
+  memo-vocab-spring:
+    image: "ginying24/memo-vocab:s1"
+    container_name: memo-vocab-spring-default
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
+    extends:
+      file: common-config.yaml
+      service: microservice-config
+
+networks:
+  memo-vocab-network:
+    driver: "bridge"
