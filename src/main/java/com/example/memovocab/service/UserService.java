@@ -51,16 +51,24 @@ public class UserService {
     public UserPostResponseDto createUser(UserPostRequestDto userReq) {
         User user = UserMapper.INSTANCE.mapToUser(userReq);
         User savedUser = userRepository.save(user);
-        sendCommunication(userReq);
+        sendAllCommunication(userReq);
         return UserMapper.INSTANCE.mapToUserPostResponseDto(savedUser);
     }
 
-    private void sendCommunication(UserPostRequestDto user) {
+    private void sendEmailCommunication(UserPostRequestDto user) {
         UserMessageDto userMessageDto = new UserMessageDto(user.getFirstName(), user.getPreference().getEmail(),
                 user.getPreference().getPhoneNumber());
         log.info("Sending email request for the details: {}", userMessageDto);
         boolean result = streamBridge.send("emailMessage-out-0", userMessageDto);
         log.info("Is the email request successfully triggered? : {}", result);
+    }
+
+    private void sendAllCommunication(UserPostRequestDto user) {
+        UserMessageDto userMessageDto = new UserMessageDto(user.getFirstName(), user.getPreference().getEmail(),
+                user.getPreference().getPhoneNumber());
+        log.info("Sending all notification request for the details: {}", userMessageDto);
+        boolean result = streamBridge.send("allNotificationMessage-out-0", userMessageDto);
+        log.info("Is the all notification request successfully triggered? : {}", result);
     }
 
     public UserPostResponseDto updateUser(Integer userId, UserPostRequestDto userReq) {

@@ -40,6 +40,9 @@ spring:
       bindings:
         emailMessage-out-0:                   # output binding name
           destination: email-communication    # exchange name in RabbitMQ
+        allNotificationMessage-out-0:
+          destination: all-notification-communication
+
 
   rabbitmq:
     host: localhost
