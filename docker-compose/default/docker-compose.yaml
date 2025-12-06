@@ -67,7 +67,7 @@ services:
       service: network-deploy-service
 
   memo-vocab-spring:
-    image: "ginying24/memo-vocab:s1"
+    image: "ginying24/memo-vocab-spring:s1"
     container_name: memo-vocab-spring-default
     ports:
       - "8080:8080"

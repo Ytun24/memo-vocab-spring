@@ -1,15 +1,13 @@
 spring:
   profiles:
-    active: default
-  config:
-    import: application_prod.yaml
+    active: prod
   application:
     name: memo-vocab-spring
   datasource:
-    url: jdbc:postgresql://localhost:5432/memo-vocab-db
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/memo-vocab-db
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: password
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -33,13 +31,18 @@ spring:
     cache-names: userCache
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  cloud:
+    stream:
+      bindings:
+        emailMessage-out-0:                   # output binding name
+          destination: email-communication    # exchange name in RabbitMQ
+        allNotificationMessage-out-0:
+          destination: all-notification-communication
 
-logging:
-  level:
-    org:
-      springframework:
-        web: DEBUG
-        validation: DEBUG
-        security: DEBUG
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}

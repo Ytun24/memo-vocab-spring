@@ -1,0 +1,21 @@
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        validation: DEBUG
+        security: DEBUG
+
+
+DB_HOST: localhost
+DB_PORT: 5432
+DB_USER: postgres
+DB_PASSWORD: password
+
+REDIS_HOST: localhost
+REDIS_PORT: 6379
+
+RABBITMQ_HOST: localhost
+RABBITMQ_PORT: 5672
+RABBITMQ_USER: guest
+RABBITMQ_PASSWORD: guest

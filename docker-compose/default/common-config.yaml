@@ -7,7 +7,10 @@ services:
     extends:
       service: network-deploy-service
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/memo-vocab-db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_DATA_REDIS_HOST: redis
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
