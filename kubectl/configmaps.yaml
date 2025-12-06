@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: memo-vocab-configmap
+  namespace: memo-vocab
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  DB_HOST: "memo-vocab-db"
+  DB_PORT: "5432"
+  REDIS_HOST: "memo-vocab-redis"
+  REDIS_PORT: "6379"

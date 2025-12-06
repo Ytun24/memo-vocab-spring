@@ -1,0 +1,36 @@
+# Flyway Job (recommended)
+# NOTE: Build a small image that COPYs your migrations into /flyway/sql:
+# Example Dockerfile (local build):
+#   FROM flyway/flyway
+#   COPY src/main/resources/db/migration /flyway/sql
+#   # tag as ginying24/memo-vocab-flyway:latest and push to registry
+
+# kubectl delete job memo-vocab-flyway -n memo-vocab
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: memo-vocab-flyway
+  namespace: memo-vocab
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: flyway
+          image: ginying24/memo-vocab-flyway:latest
+          args:
+            - -url=jdbc:postgresql://memo-vocab-db:5432/memo-vocab-db
+            - -user=postgres
+            - -password=$(POSTGRES_PASSWORD)
+            - -schemas=memo-vocab
+            - -locations=filesystem:/flyway/sql
+            - migrate
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+
+---

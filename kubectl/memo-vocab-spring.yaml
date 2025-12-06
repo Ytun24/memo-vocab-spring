@@ -1,0 +1,82 @@
+# Application Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memo-vocab-spring
+  namespace: memo-vocab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memo-vocab-spring
+  template:
+    metadata:
+      labels:
+        app: memo-vocab-spring
+    spec:
+      # initContainer waits for DB and Redis to be reachable (simple readiness gate)
+      initContainers:
+        - name: wait-for-deps
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z memo-vocab-db 5432; do echo waiting for db; sleep 2; done
+              until nc -z memo-vocab-redis 6379; do echo waiting for redis; sleep 2; done
+      containers:
+        - name: app
+          image: ginying24/memo-vocab-spring:s1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: memo-vocab-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: memo-vocab-configmap
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: memo-vocab-configmap
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: memo-vocab-configmap
+                  key: REDIS_HOST
+#          readinessProbe:
+#          livenessProbe:
+
+
+---
+# App Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: memo-vocab-spring
+  namespace: memo-vocab
+spec:
+  type: NodePort # LoadBalancer is used when on cloud providers
+  ports:
+    - protocol: TCP
+      port: 8088
+      targetPort: 8080
+  selector:
+    app: memo-vocab-spring
+

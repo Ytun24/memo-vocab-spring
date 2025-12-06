@@ -1,0 +1,132 @@
+# yaml
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: memo-vocab
+
+---
+# Secret (base64 values shown for "postgres"/"password"/"memo-vocab-db")
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+  namespace: memo-vocab
+type: Opaque
+data:
+  POSTGRES_USER: cG9zdGdyZXM=        # "postgres"
+  POSTGRES_PASSWORD: cGFzc3dvcmQ=    # "password"
+  POSTGRES_DB: bWVtby12b2NhYi1kYg==  # "memo-vocab-db"
+
+---
+# Postgres StatefulSet + Service (single replica)
+apiVersion: v1
+kind: Service
+metadata:
+  name: memo-vocab-db
+  namespace: memo-vocab
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  clusterIP: None
+  selector:
+    app: memo-vocab-db
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: memo-vocab-db
+  namespace: memo-vocab
+spec:
+  selector:
+    matchLabels:
+      app: memo-vocab-db
+  serviceName: memo-vocab-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: memo-vocab-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_DB
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+# Redis Deployment + Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: memo-vocab-redis
+  namespace: memo-vocab
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: memo-vocab-redis
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memo-vocab-redis
+  namespace: memo-vocab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memo-vocab-redis
+  template:
+    metadata:
+      labels:
+        app: memo-vocab-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+          ports:
+            - containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+---
